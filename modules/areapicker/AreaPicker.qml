@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import qs.components.containers
 import qs.components.misc
+import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
@@ -12,6 +13,9 @@ Scope {
 
         property bool freeze
         property bool closing
+        property bool clipboardOnly: false
+        property bool recording: false
+        property bool recordWithSound: false
 
         Variants {
             model: Quickshell.screens
@@ -40,6 +44,8 @@ Scope {
                 Picker {
                     loader: root
                     screen: win.modelData
+                    recording: root.recording
+                    recordWithSound: root.recordWithSound
                 }
             }
         }
@@ -51,12 +57,55 @@ Scope {
         function open(): void {
             root.freeze = false;
             root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = false;
+            root.recordWithSound = false;
             root.activeAsync = true;
         }
 
         function openFreeze(): void {
             root.freeze = true;
             root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = false;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+
+        function openClip(): void {
+            root.freeze = false;
+            root.closing = false;
+            root.clipboardOnly = true;
+            root.recording = false;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+
+        function openFreezeClip(): void {
+            root.freeze = true;
+            root.closing = false;
+            root.clipboardOnly = true;
+            root.recording = false;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+
+        // Recording variants reuse the same area picker to select geometry, then start Recorder
+        function openRecord(): void {
+            root.freeze = false;
+            root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = true;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+
+        function openRecordSound(): void {
+            root.freeze = false;
+            root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = true;
+            root.recordWithSound = true;
             root.activeAsync = true;
         }
     }
@@ -67,6 +116,9 @@ Scope {
         onPressed: {
             root.freeze = false;
             root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = false;
+            root.recordWithSound = false;
             root.activeAsync = true;
         }
     }
@@ -77,6 +129,35 @@ Scope {
         onPressed: {
             root.freeze = true;
             root.closing = false;
+            root.clipboardOnly = false;
+            root.recording = false;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+    }
+
+    CustomShortcut {
+        name: "screenshotClip"
+        description: "Open screenshot tool (clipboard)"
+        onPressed: {
+            root.freeze = false;
+            root.closing = false;
+            root.clipboardOnly = true;
+            root.recording = false;
+            root.recordWithSound = false;
+            root.activeAsync = true;
+        }
+    }
+
+    CustomShortcut {
+        name: "screenshotFreezeClip"
+        description: "Open screenshot tool (freeze mode, clipboard)"
+        onPressed: {
+            root.freeze = true;
+            root.closing = false;
+            root.clipboardOnly = true;
+            root.recording = false;
+            root.recordWithSound = false;
             root.activeAsync = true;
         }
     }

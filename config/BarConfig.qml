@@ -12,6 +12,7 @@ JsonObject {
     property Status status: Status {}
     property Clock clock: Clock {}
     property Sizes sizes: Sizes {}
+    property list<string> excludedScreens: []
 
     property list<var> entries: [
         {
@@ -56,6 +57,7 @@ JsonObject {
         property bool workspaces: true
         property bool volume: true
         property bool brightness: true
+        property bool invertScrollDirection: false
     }
 
     component Popouts: JsonObject {

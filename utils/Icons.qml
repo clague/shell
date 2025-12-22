@@ -4,6 +4,7 @@ import qs.config
 import Quickshell
 import Quickshell.Services.Notifications
 import QtQuick
+import Caelestia
 
 Singleton {
     id: root
@@ -100,10 +101,22 @@ Singleton {
         })
 
     function getAppIcon(name: string, fallback: string): string {
-        const icon = DesktopEntries.heuristicLookup(name)?.icon;
-        if (fallback !== "undefined")
-            return Quickshell.iconPath(icon, fallback);
-        return Quickshell.iconPath(icon);
+        const entry = DesktopEntries.heuristicLookup(name);
+        const icon = entry?.icon;
+        const fallbackIcon = fallback ?? "image-missing";
+
+        if (icon) {
+            const looksLikePath = icon.includes("/");
+            if (looksLikePath) {
+                const resolved = Qt.resolvedUrl(icon);
+                if (CUtils.fileExists(resolved))
+                    return Quickshell.iconPath(resolved, fallbackIcon);
+            } else if (CUtils.themeIconExists(icon)) {
+                return Quickshell.iconPath(icon, fallbackIcon);
+            }
+        }
+
+        return Quickshell.iconPath(fallbackIcon);
     }
 
     function getAppCategoryIcon(name: string, fallback: string): string {

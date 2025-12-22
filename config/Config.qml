@@ -26,6 +26,7 @@ Singleton {
     property alias sidebar: adapter.sidebar
     property alias services: adapter.services
     property alias paths: adapter.paths
+    property alias ai: adapter.ai
 
     // Public save function - call this to persist config changes
     function save(): void {
@@ -471,6 +472,7 @@ Singleton {
             property SidebarConfig sidebar: SidebarConfig {}
             property ServiceConfig services: ServiceConfig {}
             property UserPaths paths: UserPaths {}
+            property AiConfig ai: AiConfig {}
         }
     }
 }

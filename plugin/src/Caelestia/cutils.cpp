@@ -5,6 +5,7 @@
 #include <QtQuick/qquickwindow.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qicon.h>
 #include <qfuturewatcher.h>
 #include <qqmlengine.h>
 
@@ -46,22 +47,33 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
         return;
     }
 
-    auto scaledRect = rect;
-    const qreal scale = target->window()->devicePixelRatio();
-    if (rect.isValid() && !qFuzzyCompare(scale + 1.0, 2.0)) {
-        scaledRect =
-            QRectF(rect.left() * scale, rect.top() * scale, rect.width() * scale, rect.height() * scale).toRect();
-    }
-
     const QSharedPointer<const QQuickItemGrabResult> grabResult = target->grabToImage();
 
     QObject::connect(grabResult.data(), &QQuickItemGrabResult::ready, this,
-        [grabResult, scaledRect, path, onSaved, onFailed, this]() {
+        [grabResult, rect, path, onSaved, onFailed, target, this]() {
             const auto future = QtConcurrent::run([=]() {
                 QImage image = grabResult->image();
 
-                if (scaledRect.isValid()) {
-                    image = image.copy(scaledRect);
+                if (rect.isValid()) {
+                    // Compute actual pixel scaling based on grabbed image vs item size.
+                    // This is robust across fractional monitor scales and Wayland backends.
+                    const qreal itemW = qMax<qreal>(1.0, target->width());
+                    const qreal itemH = qMax<qreal>(1.0, target->height());
+                    const qreal scaleX = static_cast<qreal>(image.width()) / itemW;
+                    const qreal scaleY = static_cast<qreal>(image.height()) / itemH;
+
+                    QRectF rf(rect.left() * scaleX,
+                              rect.top() * scaleY,
+                              rect.width() * scaleX,
+                              rect.height() * scaleY);
+
+                    // Convert to an aligned integer rect and clamp to image bounds
+                    QRect crop = rf.toAlignedRect().intersected(image.rect());
+                    if (!crop.isEmpty()) {
+                        image = image.copy(crop);
+                    } else {
+                        qWarning() << "CUtils::saveItem: computed crop rect is empty after scaling";
+                    }
                 }
 
                 const QString file = path.toLocalFile();
@@ -101,8 +113,9 @@ bool CUtils::copyFile(const QUrl& source, const QUrl& target, bool overwrite) co
     }
 
     if (overwrite) {
-        if (!QFile::remove(target.toLocalFile())) {
-            qWarning() << "CUtils::copyFile: overwrite was specified but failed to remove" << target.toLocalFile();
+        const QString targetPath = target.toLocalFile();
+        if (QFileInfo::exists(targetPath) && !QFile::remove(targetPath)) {
+            qWarning() << "CUtils::copyFile: overwrite was specified but failed to remove" << targetPath;
             return false;
         }
     }
@@ -126,6 +139,27 @@ QString CUtils::toLocalFile(const QUrl& url) const {
     }
 
     return url.toLocalFile();
+}
+
+bool CUtils::fileExists(const QUrl& path) const {
+    if (!path.isValid()) {
+        return false;
+    }
+
+    if (path.isLocalFile()) {
+        return QFileInfo::exists(path.toLocalFile());
+    }
+
+    // Best-effort fallback for other schemes such as qrc
+    return QFileInfo::exists(path.toString());
+}
+
+bool CUtils::themeIconExists(const QString& name) const {
+    if (name.isEmpty()) {
+        return false;
+    }
+
+    return QIcon::hasThemeIcon(name);
 }
 
 } // namespace caelestia

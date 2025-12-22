@@ -7,15 +7,19 @@ import "modules/drawers"
 import "modules/background"
 import "modules/areapicker"
 import "modules/lock"
+import "modules/configeditor"
 import Quickshell
 
 ShellRoot {
-    Background {}
-    Drawers {}
-    AreaPicker {}
     Lock {
         id: lock
     }
+    Background {
+        lock: lock
+    }
+    Drawers {}
+    AreaPicker {}
+    WindowFactory {}
 
     Shortcuts {}
     BatteryMonitor {}

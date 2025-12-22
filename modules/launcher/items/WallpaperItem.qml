@@ -13,6 +13,9 @@ Item {
     required property FileSystemEntry modelData
     required property PersistentProperties visibilities
 
+    // Play the animated wallpaper preview?
+    property bool animatePreview: false
+
     scale: 0.5
     opacity: 0
     z: PathView.z ?? 0
@@ -68,6 +71,8 @@ Item {
             path: root.modelData.path
             smooth: !root.PathView.view.moving
             cache: true
+            preferAnimated: root.animatePreview
+            playbackEnabled: root.animatePreview
 
             anchors.fill: parent
         }

@@ -13,9 +13,12 @@ Item {
     required property Item popouts
 
     readonly property PersistentProperties props: PersistentProperties {
-        property bool recordingListExpanded: false
+        property bool mediaListExpanded: false
         property string recordingConfirmDelete
         property string recordingMode
+        property string screenshotConfirmDelete
+        property string screenshotMode
+        property int utilitiesMediaTab: 0
 
         reloadableId: "utilities"
     }
