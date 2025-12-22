@@ -157,7 +157,7 @@ Item {
         // Crossfade/scale state lives on the slot wrapper
         opacity: 0
         scale: Wallpapers.showPreview ? 1 : 0.8
-        playbackEnabled: root.current === img && !root.sessionLocked
+        property bool playbackEnabled: root.current === img && !root.sessionLocked
 
         // --- Static renderer (persistent) ---
         CachingImage {

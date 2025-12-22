@@ -108,6 +108,7 @@ Item {
                 }
 
                 Pane {
+                    index: 3
                     sourceComponent: AiChat {}
                 }
             }

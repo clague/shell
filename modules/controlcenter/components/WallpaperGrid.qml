@@ -73,7 +73,6 @@ GridView {
                     path: modelData.path
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectCrop
-                    cache: true
                     visible: opacity > 0
                     antialiasing: true
                     smooth: true

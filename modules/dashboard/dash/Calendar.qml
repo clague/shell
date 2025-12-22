@@ -669,7 +669,7 @@ Item {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredWidth: parent.width / parent.segmentCount
+                        //Layout.preferredWidth: parent.width / parent.segmentCount
                         height: 4
                         radius: 2
                         color: dayCell.eventColor

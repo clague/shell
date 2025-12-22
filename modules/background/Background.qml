@@ -37,7 +37,7 @@ Loader {
 
             Wallpaper {
                 id: wallpaper
-                sessionLock: backgroundLoader.lock ? backgroundLoader.lock.lock : null
+                //sessionLock: backgroundLoader.lock ? backgroundLoader.lock.lock : null
             }
 
             Visualiser {
