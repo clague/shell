@@ -98,12 +98,6 @@ StyledRect {
 
             implicitHeight: root.nonAnimHeight
 
-            Behavior on implicitHeight {
-                Anim {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                }
-            }
 
             Loader {
                 id: image
@@ -350,6 +344,7 @@ StyledRect {
 
             Item {
                 id: closeBtn
+                visible: Config.notifs.timeoutCircle
 
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -380,7 +375,7 @@ StyledRect {
             Item {
                 id: expandBtn
 
-                anchors.right: closeBtn.left
+                anchors.right: Config.notifs.timeoutCircle ? closeBtn.left : parent.right
                 anchors.top: parent.top
                 anchors.rightMargin: Appearance.spacing.small
 
@@ -506,7 +501,7 @@ StyledRect {
 
     Loader {
         id: progressBar
-        active: Config.notifs.timeoutBar
+        active: Config.notifs.timeoutBar && root.modelData.timer.running 
         asynchronous: true
 
         anchors.right: parent.right
