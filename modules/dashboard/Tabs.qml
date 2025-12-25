@@ -50,6 +50,11 @@ Item {
             text: qsTr("AI Chat")
         }
 
+        Tab {
+            iconName: "cloud"
+            text: qsTr("Weather")
+        }
+
         // Tab {
         //     iconName: "workspaces"
         //     text: qsTr("Workspaces")

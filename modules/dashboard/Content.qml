@@ -111,6 +111,11 @@ Item {
                     index: 3
                     sourceComponent: AiChat {}
                 }
+
+                Pane {
+                    index: 4
+                    sourceComponent: Weather {}
+                }
             }
 
             Behavior on contentX {
