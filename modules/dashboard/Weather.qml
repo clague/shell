@@ -1,10 +1,7 @@
 import qs.components
 import qs.services
 import qs.config
-<<<<<<< HEAD
 import qs.utils
-=======
->>>>>>> upstream/main
 import QtQuick
 import QtQuick.Layouts
 
