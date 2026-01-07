@@ -87,7 +87,6 @@ Item {
                 id: row
 
                 Pane {
-                    index: 0
                     sourceComponent: Dash {
                         visibilities: root.visibilities
                         state: root.state
@@ -96,14 +95,12 @@ Item {
                 }
 
                 Pane {
-                    index: 1
                     sourceComponent: Media {
                         visibilities: root.visibilities
                     }
                 }
 
                 Pane {
-                    index: 2
                     sourceComponent: Performance {}
                 }
 
@@ -139,14 +136,12 @@ Item {
     }
 
     component Pane: Loader {
-        required property int index
-        
         Layout.alignment: Qt.AlignTop
 
         Component.onCompleted: active = Qt.binding(() => {
-            const current = view.currentIndex;
-            // Activate current pane and adjacent panes for smooth scrolling
-            return Math.abs(index - current) <= 1;
+            const vx = Math.floor(view.visibleArea.xPosition * view.contentWidth);
+            const vex = Math.floor(vx + view.visibleArea.widthRatio * view.contentWidth);
+            return (vx >= x && vx <= x + implicitWidth) || (vex >= x && vex <= x + implicitWidth);
         })
     }
 }
