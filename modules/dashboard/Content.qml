@@ -111,6 +111,10 @@ Item {
                 Pane {
                     sourceComponent: Weather {}
                 }
+
+                Pane {
+                    sourceComponent: ClipboardPane {}
+                }
             }
 
             Behavior on contentX {

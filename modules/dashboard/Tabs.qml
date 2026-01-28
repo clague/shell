@@ -55,6 +55,11 @@ Item {
             text: qsTr("Weather")
         }
 
+        Tab {
+            iconName: "content_paste"
+            text: qsTr("Clipboard")
+        }
+
         // Tab {
         //     iconName: "workspaces"
         //     text: qsTr("Workspaces")
