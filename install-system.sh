@@ -5,9 +5,9 @@ set -e
 rm -rf build
 cmake -S . -B build \
   -G Ninja \
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_COMPILER=clazy \
-  -DCMAKE_INSTALL_PREFIX=/usr \
+  -DCMAKE_INSTALL_PREFIX=/ \
   -DINSTALL_LIBDIR=lib/caelestia \
   -DINSTALL_QMLDIR=lib/qt6/qml \
   -DINSTALL_QSCONFDIR=etc/xdg/quickshell/caelestia \
